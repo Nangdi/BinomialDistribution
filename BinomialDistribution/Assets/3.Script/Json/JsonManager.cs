@@ -5,6 +5,7 @@ using System.IO;
 using UnityEngine;
 public class GameSettingData
 {
+    public bool useUnityOnTop = false;
 }
 public class PortJson
 {

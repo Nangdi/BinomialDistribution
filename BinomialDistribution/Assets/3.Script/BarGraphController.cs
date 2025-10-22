@@ -1,48 +1,80 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
+using System.Linq;
+using static UnityEngine.Rendering.DebugUI;
+[System.Serializable]
+public class BarGraph
+{
+    public Image bar;   // 막대 이미지
+    public TMP_Text valueText; // 현재 값 표시용 텍스트
+    public int barValue;   // 내부 카운트
+}
 
 public class BarGraphController : MonoBehaviour
 {
-    [Header("Bar References (씬에 이미 존재하는 15개)")]
-    public List<Image> bars = new List<Image>();   // Inspector에 15개 Image 직접 할당
+    [Header("Today")]
+    public List<BarGraph> barGraphs =new List<BarGraph>();   // Inspector에 15개 Image 직접 할당
     public float maxHeight = 500f;                 // 막대 최대 높이(px)
-
-    private List<float> values = new List<float>(); // 각 막대의 실제 값
+    public int todayTotalCount;
+    //private List<int> values = new List<int>(); // 각 막대의 실제 값
+    [Header("Untilnow")]
+    public List<BarGraph> totalBarGraphs = new List<BarGraph>();   // Inspector에 15개 Image 직접 할당
 
     void Start()
     {
-        // 15개 값 초기화
-        for (int i = 0; i < bars.Count; i++)
-            values.Add(0f);
 
+
+        // 15개 값 초기화
+        InitTotal();
         ResetBars();  // 초기화 시작
     }
 
     // 막대 전체 리셋
     public void ResetBars()
     {
-        for (int i = 0; i < bars.Count; i++)
+        Debug.Log("리셋");
+        for (int i = 0; i < barGraphs.Count; i++)
         {
-            values[i] = 0f;
-            Debug.Log("크기초기화");
+            barGraphs[i].barValue = 0;
+            UpdateValueText(barGraphs[i]);
             // UI 크기 초기화
-            RectTransform rt = bars[i].rectTransform;
+            RectTransform rt = barGraphs[i].bar.rectTransform;
             rt.sizeDelta = new Vector2(rt.sizeDelta.x, 10f);
+            // 색상 변화(선택)
+            barGraphs[i].bar.color = Color.Lerp(Color.cyan, Color.red, 0);
         }
+    }
+    //total UI Init
+    private void InitTotal()
+    {
+        for (int i = 0; i < totalBarGraphs.Count; i++)
+        {
+            totalBarGraphs[i].barValue = JsonManager.instance.gameSettingData.barValueArray[i];
+        }
+        UpdateGraph();
     }
 
     // 특정 인덱스(1~15)의 막대값 +1
     public void AddValue(int index)
     {
-        if (index < 0 || index >bars.Count)
+        if (index < 0 || index > barGraphs.Count)
         {
-            Debug.LogWarning($"잘못된 인덱스: {index}. (1~{bars.Count})");
+            Debug.LogWarning($"잘못된 인덱스: {index}. (1~{barGraphs.Count})");
             return;
         }
 
         int idx = index - 1;  // 0-based index
-        values[idx] += 1f;
+        barGraphs[idx].barValue += 1;
+        todayTotalCount++;
+        //전체 total 갯수 ++;
+        JsonManager.instance.gameSettingData.totalSum++;
+        //idx에 해당하는 totalbarValue[idx] ++;
+       totalBarGraphs[idx].barValue++;
+        
+
 
         UpdateGraph();
     }
@@ -51,31 +83,70 @@ public class BarGraphController : MonoBehaviour
     private void UpdateGraph()
     {
         // 현재 최대값 찾기
-        float maxValue = Mathf.Max(values.ToArray());
-        if (maxValue <= 0f) maxValue = 1f; // 0으로 나누기 방지
-
-        // 막대별 크기 재조정
-        for (int i = 0; i < bars.Count; i++)
+        // 최대값 찾기
+        float maxValue = -1;
+        float totalMaxValue = -1;
+        foreach (var bar in barGraphs)
         {
-            float normalized = values[i] / maxValue;
-            float height = normalized * maxHeight;
-            if(height == 0)
-            {
-                height = 10f;
-            }
-            RectTransform rt = bars[i].rectTransform;
-            rt.sizeDelta = new Vector2(rt.sizeDelta.x, height);
-
-            // 색상 변화(선택)
-            bars[i].color = Color.Lerp(Color.cyan, Color.red, normalized);
+            if (bar.barValue > maxValue) maxValue = bar.barValue;
         }
+        foreach (var bar in totalBarGraphs)
+        {
+            if (bar.barValue > totalMaxValue) totalMaxValue = bar.barValue;
+        }
+        //Debug.Log($"maxValue : {maxValue}");
+        // 막대별 크기 재조정
+        float percentageSum =0;
+        for (int i = 0; i < barGraphs.Count; i++)
+        {
+            //그래프높이, 색 업데이트
+            SetGraph(barGraphs[i].barValue, barGraphs[i].bar, maxValue);
+            SetGraph(totalBarGraphs[i].barValue, totalBarGraphs[i].bar , totalMaxValue);
+            //텍스트 업데이트(그래프별 카운트)
+            UpdateValueText(barGraphs[i]);
+            float normalized = (float)totalBarGraphs[i].barValue / JsonManager.instance.gameSettingData.totalSum *100;
+            float rounded = Mathf.Round(normalized * 10) / 10;
+            Debug.Log($"반올림 : {Mathf.Round(normalized * 10)}");
+            Debug.Log($"반올림후 곱 : {rounded}");
+
+            if (i != totalBarGraphs.Count - 1)
+            {
+                percentageSum += rounded;
+                UpdatePercentageText(totalBarGraphs[i].valueText, rounded);
+
+            }
+            else
+            {
+                float fixPer = 100 - percentageSum;
+                float fixRounded = Mathf.Round(fixPer * 10) / 10;
+                UpdatePercentageText(totalBarGraphs[i].valueText, fixRounded);
+            }
+
+        }
+    }
+    public void SetGraph(int value , Image graph , float max)
+    {
+        float normalized = value / max;
+        float height = normalized * maxHeight;
+        //Debug.Log($"value : {value} , max : {max} , nomalized : {normalized} ");
+        if (height == 0)
+        {
+            height = 10f;
+        }
+        RectTransform rt = graph.rectTransform;
+        rt.sizeDelta = new Vector2(rt.sizeDelta.x, height);
+
+        // 색상 변화(선택)
+        graph.color = Color.Lerp(Color.cyan, Color.red, normalized);
+
+
     }
 
     // 테스트용 입력
     void Update()
     {
         // 숫자키(Alpha1~Alpha9) 및 Keypad1~15 입력 테스트
-        for (int i = 0; i < 10; i++)
+        for (int i = 1; i < 10; i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha0 + i))
                 AddValue(i);
@@ -89,5 +160,37 @@ public class BarGraphController : MonoBehaviour
         // R키 → 전체 리셋
         if (Input.GetKeyDown(KeyCode.R))
             ResetBars();
+    }
+    public void UpdateValueText(BarGraph graph) 
+    {
+        graph.valueText.text = $"{graph.barValue}";
+    }
+    public void UpdatePercentageText(TMP_Text percentageText , float percent)
+    {
+        //백분률로 업데이트
+        percentageText.text = $"{percent}%";
+    }
+
+
+
+
+    private void SaveDataToJson()
+    {
+        int[] tempArray = JsonManager.instance.gameSettingData.barValueArray;
+
+        for (int i = 0; i < tempArray.Length; i++)
+        {
+            tempArray[i] += barGraphs[i].barValue;
+        }
+        JsonManager.instance.gameSettingData.barValueArray = tempArray;
+        JsonManager.instance.gameSettingData.totalSum = tempArray.Sum();
+        JsonManager.instance.SaveData();
+
+    }
+
+
+    void OnApplicationQuit()
+    {
+        SaveDataToJson();
     }
 }

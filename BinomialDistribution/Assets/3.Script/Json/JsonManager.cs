@@ -3,9 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+[System.Serializable]
 public class GameSettingData
 {
     public bool useUnityOnTop = false;
+    public int totalSum;
+    public int[] barValueArray = new int[15];
 }
 public class PortJson
 {
@@ -19,7 +22,7 @@ public class JsonManager : MonoBehaviour
     public static JsonManager instance;
     public GameSettingData gameSettingData;
     public PortJson portJson;
-    private string gameDataPath;
+    public  string gameDataPath;
     private string portPath;
     private void Awake()
     {
@@ -67,5 +70,9 @@ public class JsonManager : MonoBehaviour
         //예시 실행코드
         //JsonManager.LoadData(파일경로 , 데이터클래스);
 
+    }
+    public void SaveData()
+    {
+        SaveData(gameSettingData, gameDataPath);
     }
 }

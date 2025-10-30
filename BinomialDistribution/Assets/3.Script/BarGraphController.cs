@@ -106,8 +106,6 @@ public class BarGraphController : MonoBehaviour
             UpdateValueText(barGraphs[i]);
             float normalized = (float)totalBarGraphs[i].barValue / JsonManager.instance.gameSettingData.totalSum *100;
             float rounded = Mathf.Round(normalized * 10) / 10;
-            Debug.Log($"반올림 : {Mathf.Round(normalized * 10)}");
-            Debug.Log($"반올림후 곱 : {rounded}");
 
             if (i != totalBarGraphs.Count - 1)
             {

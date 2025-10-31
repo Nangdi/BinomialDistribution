@@ -23,6 +23,8 @@ public class BarGraphController : MonoBehaviour
     [Header("Untilnow")]
     public List<BarGraph> totalBarGraphs = new List<BarGraph>();   // Inspector에 15개 Image 직접 할당
 
+    [SerializeField]
+    private BarGraphCurveConnector barconnector;
     void Start()
     {
 
@@ -158,6 +160,8 @@ public class BarGraphController : MonoBehaviour
         // R키 → 전체 리셋
         if (Input.GetKeyDown(KeyCode.R))
             ResetBars();
+        barconnector.ConnectBarTops();
+
     }
     public void UpdateValueText(BarGraph graph) 
     {

@@ -32,6 +32,15 @@ public class GraphRunner : MonoBehaviour
             graph.bar.fillAmount = currentFill;
             // 텍스트 위치도 같이 이동
             float yPos = maxHeight * currentFill;
+            if (float.IsNaN(startFill) || float.IsNaN(targetNormalized))
+            {
+                Debug.LogWarning($"[GraphRunner] Invalid fill value: start={startFill}, target={targetNormalized}");
+                yield break;
+            }
+            if (currentFill == 0)
+            {
+                yPos = 0;
+            }
             textRt.anchoredPosition = new Vector2(textRt.anchoredPosition.x, yPos);
 
             yield return null;

@@ -23,7 +23,7 @@ public class BarGraphController : MonoBehaviour
     public float maxHeight = 600f;                 // 막대 최대 높이(px)
     public int todayTotalCount;
     //private List<int> values = new List<int>(); // 각 막대의 실제 값
-
+    float percentageSum = 0;
     [SerializeField]
     private BarGraphCurveConnector barconnector;
     void Start()
@@ -149,16 +149,16 @@ public class BarGraphController : MonoBehaviour
     void Update()
     {
         // 숫자키(Alpha1~Alpha9) 및 Keypad1~15 입력 테스트
-        for (int i = 1; i < 10; i++)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha0 + i))
-                AddValue(i);
-        }
-        for (int i = 0; i < 6; i++)
-        {
-            if (Input.GetKeyDown(KeyCode.Keypad0 + i))
-                AddValue(10 + i);  // 10~15
-        }
+        //for (int i = 1; i < 10; i++)
+        //{
+        //    if (Input.GetKeyDown(KeyCode.Alpha0 + i))
+        //        AddValue(i);
+        //}
+        //for (int i = 0; i < 6; i++)
+        //{
+        //    if (Input.GetKeyDown(KeyCode.Keypad0 + i))
+        //        AddValue(10 + i);  // 10~15
+        //}
 
         // R키 → 전체 리셋
         if (Input.GetKeyDown(KeyCode.R))
@@ -178,11 +178,11 @@ public class BarGraphController : MonoBehaviour
     //총계 백분률적용하기
     public void UpdatePercentageText(List<BarGraph> _graph)
     {
+            percentageSum = 0;
         for (int i = 0; i < _graph.Count; i++)
         {
             float normalized = (float)_graph[i].barValue / JsonManager.instance.gameSettingData.totalSum * 100;
             float rounded = Mathf.Round(normalized * 10) / 10;
-            float percentageSum = 0;
             if (i != _graph.Count - 1)
             {
                 percentageSum += rounded;
@@ -192,7 +192,9 @@ public class BarGraphController : MonoBehaviour
             else
             {
                 float fixPer = 100 - percentageSum;
+                //Debug.Log($"fixPer : {fixPer}");
                 float fixRounded = Mathf.Round(fixPer * 10) / 10;
+                //Debug.Log($"fixRounded : {fixRounded}");
                 _graph[i].valueText.text = $"{fixRounded}";
             }
 

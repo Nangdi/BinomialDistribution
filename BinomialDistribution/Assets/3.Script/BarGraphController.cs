@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
 using System.Linq;
+using UnityEngine.Rendering;
 [System.Serializable]
 public class BarGraph
 {
@@ -26,6 +27,12 @@ public class BarGraphController : MonoBehaviour
     float percentageSum = 0;
     [SerializeField]
     private BarGraphCurveConnector barconnector;
+
+    [SerializeField]
+    private TMP_Text passedDayText;
+    [SerializeField]
+    private TMP_Text[] dayCountText;
+
     void Start()
     {
 
@@ -33,6 +40,9 @@ public class BarGraphController : MonoBehaviour
         // 15개 값 초기화
         InitTotal();
         ResetTodayBars();  // 초기화 시작
+        passedDayText.text = $" <color=#FFFF00>{CalculateDay.GetPassedDays(JsonManager.instance.gameSettingData.installDay)}일간 쌓은 구슬</color> 그래프야!";
+        dayCountText[0].text = $"오늘은 {todayTotalCount}개의 구슬이 떨어졌어";
+        dayCountText[1].text = $"오늘은 {todayTotalCount}개의 구슬이 떨어졌어";
     }
 
     // 막대 전체 리셋
@@ -42,7 +52,7 @@ public class BarGraphController : MonoBehaviour
         for (int i = 0; i < barGraphs.Count; i++)
         {
             barGraphs[i].barValue = 0;
-            UpdateValueText(barGraphs);
+            UpdatePercentageText(barGraphs, todayTotalCount);
             // UI 크기 초기화
             //RectTransform rt = barGraphs[i].bar.rectTransform;
             //rt.sizeDelta = new Vector2(rt.sizeDelta.x, 0);
@@ -83,6 +93,8 @@ public class BarGraphController : MonoBehaviour
         todayTotalCount++;
         //전체 total 갯수 ++;
         JsonManager.instance.gameSettingData.totalSum++;
+        dayCountText[0].text = $"오늘은 {todayTotalCount}개의 구슬이 떨어졌어";
+        dayCountText[1].text = $"오늘은 {todayTotalCount}개의 구슬이 떨어졌어";
         //idx에 해당하는 totalbarValue[idx] ++;
         totalBarGraphs[idx].barValue++;
 
@@ -104,9 +116,9 @@ public class BarGraphController : MonoBehaviour
     public void UpdateGraphs()
     {
         UpdateGraph(barGraphs);
-        UpdateValueText(barGraphs);
+        UpdatePercentageText(barGraphs, todayTotalCount);
         UpdateGraph(totalBarGraphs);
-        UpdatePercentageText(totalBarGraphs);
+        UpdatePercentageText(totalBarGraphs , JsonManager.instance.gameSettingData.totalSum);
 
     }
 
@@ -176,28 +188,33 @@ public class BarGraphController : MonoBehaviour
         }
     }
     //총계 백분률적용하기
-    public void UpdatePercentageText(List<BarGraph> _graph)
+    public void UpdatePercentageText(List<BarGraph> _graph , int graphSum)
     {
             percentageSum = 0;
         for (int i = 0; i < _graph.Count; i++)
         {
-            float normalized = (float)_graph[i].barValue / JsonManager.instance.gameSettingData.totalSum * 100;
-            float rounded = Mathf.Round(normalized * 10) / 10;
-            if (i != _graph.Count - 1)
+            if(graphSum == 0)
             {
-                percentageSum += rounded;
-                _graph[i].valueText.text = $"{rounded}";
-
+                _graph[i].valueText.text = $"0";
+                continue;
             }
-            else
-            {
-                float fixPer = 100 - percentageSum;
-                //Debug.Log($"fixPer : {fixPer}");
-                float fixRounded = Mathf.Round(fixPer * 10) / 10;
-                //Debug.Log($"fixRounded : {fixRounded}");
-                _graph[i].valueText.text = $"{fixRounded}";
-            }
+            float normalized = (float)_graph[i].barValue / graphSum * 100;
+            float rounded = Mathf.Round(normalized);
+            //if (i != _graph.Count - 1)
+            //{
+            //    percentageSum += rounded;
+               
 
+            //}
+            //else
+            //{
+            //    float fixPer = 100 - percentageSum;
+            //    //Debug.Log($"fixPer : {fixPer}");
+            //    float fixRounded = Mathf.Round(fixPer * 10) / 10;
+            //    //Debug.Log($"fixRounded : {fixRounded}");
+            //    _graph[i].valueText.text = $"{fixRounded}";
+            //}
+            _graph[i].valueText.text = $"{rounded}";
             //백분률로 업데이트
         }
 

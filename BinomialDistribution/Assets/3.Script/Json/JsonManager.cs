@@ -11,6 +11,7 @@ public class GameSettingData
     public int totalSum;
     public int[] barValueArray = new int[15];
     public float homeReturnTime = 120f;
+    public int[] installDay = new int[] { 2025, 11, 14 };
 }
 public class PortJson
 {
@@ -38,6 +39,7 @@ public class JsonManager : MonoBehaviour
             Destroy(gameObject);
         }
         gameSettingData.displayIndex = new int[] { 0, 1, 2 };
+        gameSettingData.installDay = new int[] { 2025, 11, 14 };
         portPath = Path.Combine(Application.streamingAssetsPath, "port.json");
         gameDataPath = Path.Combine(Application.persistentDataPath, "gameSettingData.json");
 

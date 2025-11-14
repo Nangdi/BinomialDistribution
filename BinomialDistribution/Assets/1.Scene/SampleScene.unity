@@ -1664,9 +1664,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uADF8\uB798\uD504\uCCB4\uC778\uC9C0"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a53c4c4c1dc582b49b8924b25edf23be, type: 2}
-  m_sharedMaterial: {fileID: 305138335598640675, guid: a53c4c4c1dc582b49b8924b25edf23be,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2287,6 +2286,7 @@ MonoBehaviour:
     useUnityOnTop: 0
     displayIndex: 000000000100000002000000
     totalSum: 0
+    slideTime: 2
     barValueArray: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
     homeReturnTime: 120
     installDay: 
@@ -5528,7 +5528,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1371878351
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7917,7 +7917,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clickController: {fileID: 1075885432}
   lapseTime: 0
-  endTime: 120
+  endTime: 40
   InfoPanel: {fileID: 1185445892}
   sliders:
   - {fileID: 1071622103}

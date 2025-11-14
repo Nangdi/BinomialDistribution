@@ -35,6 +35,7 @@ public class GraphScreenTransition : MonoBehaviour
         today.alpha = 0f;
         total.interactable = true;
         today.interactable = false;
+        targetTime = JsonManager.instance.gameSettingData.graphChangeTime;
     }
 
     // Update is called once per frame

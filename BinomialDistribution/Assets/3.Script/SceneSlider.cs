@@ -17,12 +17,24 @@ public class SceneSlider : MonoBehaviour
     public bool useAutoSlide;
     private float slideTime =2;
     private int slideIndex = 0;
+    Coroutine currentCo;
 
     private void Start()
     {
+        slideTime = JsonManager.instance.gameSettingData.slideTime;
+    }
+    private void OnEnable()
+    {
         if (useAutoSlide)
         {
-            StartCoroutine(AutoSlide(slideTime , NextSlide));
+            currentCo =StartCoroutine(AutoSlide(slideTime, NextSlide));
+        }
+    }
+    private void OnDisable()
+    {
+        if(currentCo != null)
+        {
+            StopCoroutine(currentCo);
         }
     }
     public void OnClickPreviousBtn()
@@ -67,8 +79,8 @@ public class SceneSlider : MonoBehaviour
     }
     private void NextSlide()
     {
-        UpdateActiveScene(slideIndex);
         slideIndex++;
+        UpdateActiveScene(slideIndex);
         slideIndex %= 4;
     }
 }

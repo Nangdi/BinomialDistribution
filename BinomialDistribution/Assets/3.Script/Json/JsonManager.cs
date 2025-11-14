@@ -8,10 +8,12 @@ public class GameSettingData
 {
     public bool useUnityOnTop = false;
     public int[] displayIndex =new int[]{ 0, 1, 2 };
-    public int totalSum;
     public int[] barValueArray = new int[15];
-    public float homeReturnTime = 120f;
+    public int totalSum;
+    public float homeTime= 40f;
     public int[] installDay = new int[] { 2025, 11, 14 };
+    public float slideTime = 2;
+    public float graphChangeTime = 120f;
 }
 public class PortJson
 {

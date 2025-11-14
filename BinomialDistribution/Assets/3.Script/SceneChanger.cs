@@ -9,13 +9,13 @@ public class SceneChanger : MonoBehaviour
     [SerializeField]
     private ButtonClickController clickController;
     public float lapseTime =0;
-    public float endTime =120f;
+    public float endTime =40f;
     private bool startCount;
     public GameObject InfoPanel;
     public SceneSlider[] sliders;
     private void Start()
     {
-        endTime = JsonManager.instance.gameSettingData.homeReturnTime;
+        endTime = JsonManager.instance.gameSettingData.homeTime;
     }
     private void Update()
     {

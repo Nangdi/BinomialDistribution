@@ -96,6 +96,7 @@ public class BarGraphController : MonoBehaviour
         dayCountText[0].text = $"오늘은 {todayTotalCount}개의 구슬이 떨어졌어";
         dayCountText[1].text = $"오늘은 {todayTotalCount}개의 구슬이 떨어졌어";
         //idx에 해당하는 totalbarValue[idx] ++;
+        JsonManager.instance.gameSettingData.barValueArray[idx]++;
         totalBarGraphs[idx].barValue++;
         UpdateGraphs();
         SaveDataToJson();
@@ -225,21 +226,21 @@ public class BarGraphController : MonoBehaviour
 
     private void SaveDataToJson()
     {
-        int[] tempArray = JsonManager.instance.gameSettingData.barValueArray;
+        //int[] tempArray = JsonManager.instance.gameSettingData.barValueArray;
 
-        for (int i = 0; i < tempArray.Length; i++)
-        {
-            tempArray[i] += barGraphs[i].barValue;
-        }
-        JsonManager.instance.gameSettingData.barValueArray = tempArray;
-        JsonManager.instance.gameSettingData.totalSum = tempArray.Sum();
+        //for (int i = 0; i < tempArray.Length; i++)
+        //{
+        //    tempArray[i] += barGraphs[i].barValue;
+        //}
+        //JsonManager.instance.gameSettingData.barValueArray = tempArray;
+        //JsonManager.instance.gameSettingData.totalSum = tempArray.Sum();
         JsonManager.instance.SaveData();
 
     }
 
 
-    void OnApplicationQuit()
-    {
-        SaveDataToJson();
-    }
+    //void OnApplicationQuit()
+    //{
+    //    SaveDataToJson();
+    //}
 }

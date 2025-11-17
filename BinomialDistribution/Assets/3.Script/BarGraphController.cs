@@ -97,8 +97,8 @@ public class BarGraphController : MonoBehaviour
         dayCountText[1].text = $"오늘은 {todayTotalCount}개의 구슬이 떨어졌어";
         //idx에 해당하는 totalbarValue[idx] ++;
         totalBarGraphs[idx].barValue++;
-
         UpdateGraphs();
+        SaveDataToJson();
 
 
     }

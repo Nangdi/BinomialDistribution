@@ -2285,11 +2285,12 @@ MonoBehaviour:
   gameSettingData:
     useUnityOnTop: 0
     displayIndex: 000000000100000002000000
-    totalSum: 0
-    slideTime: 2
     barValueArray: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-    homeReturnTime: 120
+    totalSum: 0
+    homeTime: 40
     installDay: 
+    slideTime: 2
+    graphChangeTime: 120
   gameDataPath: 
 --- !u!4 &633078154
 Transform:
@@ -7920,9 +7921,9 @@ MonoBehaviour:
   endTime: 40
   InfoPanel: {fileID: 1185445892}
   sliders:
-  - {fileID: 1071622103}
-  - {fileID: 1660387116}
   - {fileID: 1956052509}
+  - {fileID: 1660387116}
+  - {fileID: 1071622103}
 --- !u!224 &1901665328 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6094353133688039802, guid: 43c4dbdf72daab341925d732e8c70405,
@@ -8736,7 +8737,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 011aa2a3ba68f0a468776c6b66bddd60,
+      objectReference: {fileID: 21300000, guid: e62077f5c0b966142802f660d3ac867a,
         type: 3}
     - target: {fileID: 2153393006365057485, guid: b47a3eb57773bf348af2cd6a0b9bbb73,
         type: 3}

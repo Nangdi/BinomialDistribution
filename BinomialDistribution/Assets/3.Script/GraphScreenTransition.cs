@@ -47,6 +47,10 @@ public class GraphScreenTransition : MonoBehaviour
             currentLapse = 0;
             Transition();
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Transition();
+        }
     }
     public void Transition()
     {

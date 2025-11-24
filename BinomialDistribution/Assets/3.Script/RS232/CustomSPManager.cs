@@ -49,5 +49,7 @@ public class CustomSPManager : SerialPortManager
             if (Input.GetKeyDown(KeyCode.Keypad0 + i))
                 ReceivedData($"D1{i}");
         }
+        
+           
     }
 }

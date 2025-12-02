@@ -5,6 +5,7 @@ using System.IO.Ports;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 [Serializable]
@@ -14,6 +15,8 @@ public class SerialPortManager : MonoBehaviour
     public static SerialPortManager Instance { get; private set; }
 
     PortJson portJson = new PortJson();
+    public TMP_Text dataText;
+    public TMP_Text dataText1;
 
 
     SerialPort serialPort;
@@ -71,6 +74,7 @@ public class SerialPortManager : MonoBehaviour
 
                 string input = await Task.Run(() => ReadSerialData(), token);
                 //string data = GetData(input);
+            //dataText.text = $"컨트롤러에서 보낸 신호 : {input}";
 
                 if (!string.IsNullOrEmpty(input) /*&& input.Length >= 3*/)
                 {
@@ -92,6 +96,7 @@ public class SerialPortManager : MonoBehaviour
         {
 
             string input = serialPort.ReadExisting(); // 데이터 읽기
+                Debug.Log(input);
             if (!string.IsNullOrEmpty(input))
             {
                 serialBuffer.Append(input); // (1)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//using UnityEngine.Windows;
 
 public class CustomSPManager : SerialPortManager
 {
@@ -22,6 +23,8 @@ public class CustomSPManager : SerialPortManager
         // "D01" → 1, "D15" → 15 로 변환
 
         //Debug.Log($"받은데이터 : {data}");
+        dataText1.text = $"소프트웨어에서 전처리한 신호 : {data}";
+
         if (data.StartsWith("D"))
         {
             // "D" 이후의 숫자 부분만 추출

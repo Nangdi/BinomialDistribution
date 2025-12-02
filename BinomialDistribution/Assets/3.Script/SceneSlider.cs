@@ -40,18 +40,22 @@ public class SceneSlider : MonoBehaviour
     public void OnClickPreviousBtn()
     {
         sceneIndex--;
-        sceneIndex = Mathf.Clamp(sceneIndex,0, 4);
+        sceneIndex = Mathf.Clamp(sceneIndex,0, 5);
         UpdateActiveScene(sceneIndex);
     }
     public void OnClickNextBtn()
     {
         sceneIndex++;
-        sceneIndex = Mathf.Clamp(sceneIndex, 0, 4);
+        sceneIndex = Mathf.Clamp(sceneIndex, 0, 5);
         UpdateActiveScene(sceneIndex);
     }
     public void UpdateActiveScene(int index)
     {
-        homeReturn.lapseTime = 0;
+        if (!useAutoSlide)
+        {
+            homeReturn.lapseTime = 0;
+
+        }
         foreach (var item in slideScenes)
         {
             item.SetActive(false);
@@ -80,7 +84,8 @@ public class SceneSlider : MonoBehaviour
     private void NextSlide()
     {
         slideIndex++;
+        slideIndex %= 5;
         UpdateActiveScene(slideIndex);
-        slideIndex %= 4;
+        Debug.Log(slideIndex);
     }
 }
